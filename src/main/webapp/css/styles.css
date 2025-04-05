@@ -1,0 +1,14 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.nav-link {
+    color: #cbd5e1; /* Tailwind slate-300 */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #38bdf8; /* Tailwind sky-400 */
+    transition: color 0.2s ease-in-out;
+}

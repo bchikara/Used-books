@@ -1,0 +1,49 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Local environment files
+.env
+application-local.properties
+
+# Compiled classes
+*.class
+
+# node (if you're ever adding React frontend)
+node_modules/
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Eclipse
+*.classpath
+*.project
+.settings/
+
+# Mac system file
+.DS_Store
