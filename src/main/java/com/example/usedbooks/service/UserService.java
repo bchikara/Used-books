@@ -30,7 +30,6 @@ public class UserService {
     public User login(String email, String rawPassword) {
         User user = userRepository.findByEmail(email);
         
-        System.out.println("hello"+AesEncryptor.decrypt(user.getPassword()));
         if (user != null && rawPassword.equals(AesEncryptor.decrypt(user.getPassword()))) {
             return user;
         }

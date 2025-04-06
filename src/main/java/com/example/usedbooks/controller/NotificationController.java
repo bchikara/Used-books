@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.time.ZoneId;
 
 @Controller
 public class NotificationController {
@@ -20,17 +22,38 @@ public class NotificationController {
 
     @GetMapping("/books/notifications")
     public String showNotifications(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        var user = (com.example.usedbooks.model.User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/signin";
         }
 
-        // ✅ Filter notifications that are not older than 5 minutes
-        List<Notification> books = notificationRepository.findByUserIdAndCreatedAtAfter(
-                user.getId(), LocalDateTime.now().minusMinutes(5)
-        );
+        // Get current time and subtract 24 hours
+        LocalDateTime cutoff = LocalDateTime.now().minusHours(24);
 
-        model.addAttribute("books", books);
+        // Convert LocalDateTime to Date for MongoDB comparison
+        Date cutoffDate = convertToDate(cutoff);
+
+        // Fetch only fresh notifications
+        List<Notification> recentNotifications =
+                notificationRepository.findByUserIdAndCreatedAtAfter(user.getId(), cutoffDate);
+
+        // Convert Date to LocalDateTime for display in the model (if necessary)
+        for (Notification notification : recentNotifications) {
+            LocalDateTime createdAtAsLocalDateTime = convertToLocalDateTime(notification.getCreatedAt());
+            notification.setCreatedAtFromLocalDateTime(createdAtAsLocalDateTime); // Optional, depending on usage
+        }
+
+        model.addAttribute("notifications", recentNotifications);
         return "notifications";
+    }
+
+    // Convert LocalDateTime to Date (for MongoDB compatibility)
+    private Date convertToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    // Convert Date to LocalDateTime (for Java processing)
+    private LocalDateTime convertToLocalDateTime(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

@@ -12,3 +12,7 @@ body {
     color: #38bdf8; /* Tailwind sky-400 */
     transition: color 0.2s ease-in-out;
 }
+
+.nav-link {
+    @apply text-sm transition duration-150 ease-in-out;
+}
